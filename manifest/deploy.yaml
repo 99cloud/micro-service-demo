@@ -1,0 +1,150 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gateway
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - command:
+            - /app/gateway
+          env:
+            - name: WEBDAV-ENDPOINT
+              value: webdav
+            - name: PROCESS-ENDPOINT
+              value: process
+          image: 192.168.185.2:5000/demo/image:latest
+          imagePullPolicy: IfNotPresent
+          name: gateway
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+      dnsPolicy: ClusterFirst
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: process
+  name: process-v1
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  selector:
+    matchLabels:
+      app: process
+  template:
+    metadata:
+      labels:
+        app: process
+    spec:
+      containers:
+        - command:
+            - /app/process
+          env:
+            - name: WEBDAV-ENDPOINT
+              value: webdav
+          image: 192.168.185.2:5000/demo/image:latest
+          imagePullPolicy: IfNotPresent
+          name: process
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webdav
+  name: webdav-v1
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: webdav
+  template:
+    metadata:
+      labels:
+        app: webdav
+    spec:
+      containers:
+        - command:
+            - /app/storage
+          env:
+            - name: RESOURCE-ROOT
+              value: /storage
+          image: 192.168.185.2:5000/demo/image:latest
+          imagePullPolicy: IfNotPresent
+          name: webdav
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /storage
+              name: volume-f1qjy8
+      volumes:
+        - name: volume-f1qjy8
+          persistentVolumeClaim:
+            claimName: webdav
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gateway
+  name: gateway
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: gateway
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: process
+  name: process
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: process
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: webdav
+  name: webdav
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: webdav
+  type: ClusterIP

@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/index.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>image-micro-service-demo</title>
+</head>
+<body>
+<div id="app">
+    <p>
+        <label for="file">
+            <span class="button">上传图片</span>
+            <input type="file" accept="image/png,image/jpg,image/jpeg,image/webp" id="file" style="display: none" @change="uploadImage">
+        </label>
+        &nbsp;
+        <label>
+            <b>访问用户组: {{ userGroup}}</b>&nbsp;
+            <button @click="updateUserGroup">修改用户组</button>
+        </label>
+    </p>
+    <hr>
+    <div class="image-item" v-for="image in images">
+        <img :src="image" class="image-item">
+        <div class="del" @click="deleteImage(image)" >
+            <b>x</b>
+        </div>
+    </div>
+</div>
+<script src="js/axios.js"></script>
+<script src="js/vue3.2.37.global.js"></script>
+<script>
+    Vue.createApp({
+        data() {
+            return {
+                images: [],
+                userGroup: "normal",
+            }
+        },
+        methods: {
+            updateUserGroup() {
+                const userGroup = prompt("请输入用户组")
+                if (userGroup !== null) {
+                    this.userGroup = userGroup
+                    this.setCookie("userGroup", userGroup)
+                }
+            },
+            setCookie(key, val) {
+                document.cookie = key + '=' + val
+            },
+            getCookies() {
+                const cookies = {}
+                for (const item of document.cookie.split(";")) {
+                    const kv = item.split('=')
+                    let k = kv[0].trim()
+                    let v = ""
+                    if (kv.length >= 2) {
+                        v = kv[1].trim()
+                    }
+                    cookies[k] = v
+                }
+                return cookies
+            },
+            uploadImage(e) {
+                if (e.target.files.length !== 0) {
+                    axios.post("/images", e.target.files[0]).then((response) => {
+                        if (response.status === 200) {
+                            this.listImages()
+                        }
+                    })
+
+                }
+            },
+            deleteImage(image) {
+                if (image === undefined) {
+                    return
+                }
+                axios.delete(image).then((response) => {
+                    this.listImages()
+                })
+            },
+            listImages() {
+                axios.get("/images").then((response) => {
+                    if (response.status === 200) {
+                        this.images = response.data
+                    }
+                })
+            }
+        },
+        mounted() {
+            const userGroup = this.getCookies()["userGroup"]
+            console.log(userGroup === undefined, userGroup)
+            if (userGroup === undefined) {
+                this.setCookie("userGroup", this.userGroup)
+
+            } else {
+                this.userGroup = userGroup
+            }
+
+            this.listImages()
+        }
+    }).mount('#app')
+
+</script>
+</body>
+</html>
