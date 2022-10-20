@@ -22,7 +22,7 @@ spec:
               value: webdav
             - name: PROCESS-ENDPOINT
               value: process
-          image: 192.168.185.2:5000/demo/image:latest
+          image: lyp256/ms-demo:latest
           imagePullPolicy: IfNotPresent
           name: gateway
           ports:
@@ -54,7 +54,7 @@ spec:
           env:
             - name: WEBDAV-ENDPOINT
               value: webdav
-          image: 192.168.185.2:5000/demo/image:latest
+          image: lyp256/ms-demo:latest
           imagePullPolicy: IfNotPresent
           name: process
           ports:
@@ -82,11 +82,11 @@ spec:
     spec:
       containers:
         - command:
-            - /app/storage
+            - /app/webdav
           env:
             - name: RESOURCE-ROOT
               value: /storage
-          image: 192.168.185.2:5000/demo/image:latest
+          image: lyp256/ms-demo:latest
           imagePullPolicy: IfNotPresent
           name: webdav
           ports:
