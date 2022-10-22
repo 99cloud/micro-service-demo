@@ -62,6 +62,17 @@ spec:
               name: http
               protocol: TCP
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: webdav
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -113,9 +124,10 @@ spec:
       port: 80
       protocol: TCP
       targetPort: 8080
+      nodePort: 30086
   selector:
     app: gateway
-  type: ClusterIP
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
