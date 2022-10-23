@@ -55,7 +55,7 @@ spec:
             - name: WEBDAV-ENDPOINT
               value: webdav
             - name: GRAYSCALE
-              value: true
+              value: "false"
             - name: WATERMARK
               value: ""
           image: lyp256/ms-demo:latest
