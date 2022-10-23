@@ -54,6 +54,10 @@ spec:
           env:
             - name: WEBDAV-ENDPOINT
               value: webdav
+            - name: GRAYSCALE
+              value: true
+            - name: WATERMARK
+              value: ""
           image: lyp256/ms-demo:latest
           imagePullPolicy: IfNotPresent
           name: process

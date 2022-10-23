@@ -2,7 +2,7 @@
 
 ## 1. 项目简介
 
-演示代码是一个简短的图片处理服务
+演示代码是一个简单的图片处理服务
 
 ```text
             +---------+                   +---------+
@@ -16,9 +16,9 @@
 
 - Gateway 应用入口
 - Webdav 负责照片数据的 CRUD
-- Process 是图片处理，包含多种处理算法：灰化、压缩等
+- Process 是图片处理，包含多种处理算法：灰化、加水印等
 
-Gateway 可以直接调用 Webdav 接口，读取和展示图片；也可以调用 Process 接口，先 Process 从 Webdav 拿到图片信息，然后图片处理之后再从 Process 返回给 Gateway。
+Gateway 可以直接调用 Webdav 接口，查询图片列表；然后调用 Process 接口（Process 从 Webdav 拿到图片，然后图片处理之后再返回给 Gateway）展示图片。
 
 # 2. 项目部署
 
@@ -44,3 +44,9 @@ kubectl -n ms-demo apply -f https://gitee.com/dev-99cloud/micro-service-demo/raw
 ```
 
 然后访问 `http://<IP>:30086`，可以看到 Gateway 页面，可以 CRUD 图片。
+
+## 2.3 灰度发布
+
+## 2.4 熔断
+
+`/process/_statusCode_`
