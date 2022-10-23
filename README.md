@@ -39,14 +39,31 @@ kubectl delete ns ms-demo
 # 创建 namespace ms-demo
 kubectl create ns ms-demo
 
-部署项目到 ms-demo namespace
-kubectl -n ms-demo apply -f https://gitee.com/dev-99cloud/micro-service-demo/raw/master/manifest/deploy.yaml
+# 部署项目到 ms-demo namespace
+wget https://gitee.com/dev-99cloud/micro-service-demo/raw/master/manifest/deploy.yaml
+kubectl -n ms-demo apply -f deploy.yaml
 ```
 
 然后访问 `http://<IP>:30086`，可以看到 Gateway 页面，可以 CRUD 图片。
 
-## 2.3 灰度发布
+## 2.3 图片处理算法展示
 
-## 2.4 熔断
+调整 deploy.yaml 中，令：
 
-`/process/_statusCode_`
+1. `GRAYSCALE = "true"`，重新 apply，可以看到图片的灰化效果
+1. 配置 `WATERMARK = "hello"`，可以看到水印效果。
+
+## 2.4 模拟访问失败的情况
+
+访问 `/process/_statusCode_`，可以返回 500
+
+```console
+# curl -i http://47.242.127.16:30086/process/_statusCode_
+HTTP/1.1 500 Internal Server Error
+Pod-Name: gateway-7f745b5c5d-sbn8h
+Date: Sun, 23 Oct 2022 10:05:07 GMT
+Content-Length: 21
+Content-Type: text/plain; charset=utf-8
+
+Internal Server Error
+```
