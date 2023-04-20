@@ -25,7 +25,7 @@ Gateway 可以直接调用 Webdav 接口，查询图片列表；然后调用 Pro
 ## 2.1 环境准备
 
 1. AIO 环境，4Core / 8G / 40G，CentOS 7.9
-2. 部署 KubeClipper v1.2.1 + K8S v1.23.6，参考 [Github](https://github.com/wu-wenxiang/lab-kubernetes/blob/master/doc/cloudnative-and-mircoservice.md#322-%E5%AE%89%E8%A3%85-k8s-1236) 或 [Gitee](https://gitee.com/wu-wen-xiang/lab-kubernetes/blob/master/doc/cloudnative-and-mircoservice.md#322-%E5%AE%89%E8%A3%85-k8s-1236)
+2. 部署 KubeClipper 1.3.2 + K8S v1.23.6，参考 [Github](https://github.com/wu-wenxiang/lab-kubernetes/blob/master/doc/cloudnative-and-mircoservice.md#322-%E5%AE%89%E8%A3%85-k8s-1236) 或 [Gitee](https://gitee.com/wu-wen-xiang/lab-kubernetes/blob/master/doc/cloudnative-and-mircoservice.md#322-%E5%AE%89%E8%A3%85-k8s-1236)
 3. 配置默认的、支持动态分配存储的 Storage Class，参考 [Github](https://github.com/wu-wenxiang/lab-kubernetes/blob/master/doc/kubernetes-best-practices.md#45-local-%E5%92%8C%E5%8A%A8%E6%80%81%E5%88%86%E9%85%8D) 或 [Gitee](https://gitee.com/wu-wen-xiang/lab-kubernetes/blob/master/doc/kubernetes-best-practices.md#45-local-%E5%92%8C%E5%8A%A8%E6%80%81%E5%88%86%E9%85%8D)
 
 ## 2.2 部署项目到标准 K8S 环境
